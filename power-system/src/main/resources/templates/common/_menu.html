@@ -1,0 +1,22 @@
+    <div class="theme-left-layout">
+        <div class="theme-left-logo"></div>
+        <div class="theme-left-menu">
+            <dl>
+                <dt onclick="AM.renderData('控制台','http://www.baidu.com/','','','')" icons="&#xe706;" href="https://w3.insdep.com/member/application/index/index/info"><i class='iconfont'>&#xe706;</i></i>控制台</dt>
+            </dl>
+            @if(has(menus)){
+            @ for(menu in menus){
+	            <dl>
+	                <dt icons="${menu.icon}" id="${menu.id}" inames="${menu.name}"><i class="iconfont">${menu.icon}</i>${menu.name}</dt>
+	                <dd>
+	                	<ul id="menu">
+	                		 <script type="text/javascript"> 
+			                	AM.renderNav('/system/loadNav.do',${menu.id});
+		 	                </script> 
+                    </ul>
+	                </dd>
+	            </dl>
+            @}
+            @}
+        </div>
+    </div>

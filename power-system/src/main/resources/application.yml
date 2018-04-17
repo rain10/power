@@ -1,0 +1,31 @@
+#server start
+server:
+  port: 8721
+  servlet-path: /
+#server end
+spring:
+  devtools:
+    restart:
+      enabled: false
+  application:
+    name: SYSTEM
+#配置日志
+logging:
+  #配置日志文件路径
+  level:
+    xatu.zsl: debug #不同目录下的日志可配置不同级别
+    org.springfromework.web: info
+    org.hibernate: error
+  #采用相对路径方式将日志文件输出到【log\myspringboot.log】
+  file: log\myspringboot.log
+    
+#服务配置
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8720/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+  server:
+    enable-self-preservation: false

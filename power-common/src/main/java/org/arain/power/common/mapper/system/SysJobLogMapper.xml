@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.arain.power.common.mapper.system.SysJobLogMapper" >
+  <resultMap id="BaseResultMap" type="org.arain.power.common.pojo.system.SysJobLog" >
+    <id column="ID_" property="id" jdbcType="BIGINT" />
+    <result column="JOB_ID_" property="jobId" jdbcType="BIGINT" />
+    <result column="TIME_CONSUMING" property="timeConsuming" jdbcType="VARCHAR" />
+    <result column="JOB_SUCCESS" property="jobSuccess" jdbcType="BIGINT" />
+    <result column="JOB_EXCEPTIPN" property="jobExceptipn" jdbcType="VARCHAR" />
+    <result column="START_TIME" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="END_TIME" property="endTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID_, JOB_ID_, TIME_CONSUMING, JOB_SUCCESS, JOB_EXCEPTIPN, START_TIME, END_TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.arain.power.common.pojo.system.SysJobLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sys_job_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_job_log
+    where ID_ = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sys_job_log
+    where ID_ = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="org.arain.power.common.pojo.system.SysJobLogExample" >
+    delete from sys_job_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="org.arain.power.common.pojo.system.SysJobLog" >
+    insert into sys_job_log (ID_, JOB_ID_, TIME_CONSUMING, 
+      JOB_SUCCESS, JOB_EXCEPTIPN, START_TIME, 
+      END_TIME)
+    values (#{id,jdbcType=BIGINT}, #{jobId,jdbcType=BIGINT}, #{timeConsuming,jdbcType=VARCHAR}, 
+      #{jobSuccess,jdbcType=BIGINT}, #{jobExceptipn,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="org.arain.power.common.pojo.system.SysJobLog" >
+    insert into sys_job_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID_,
+      </if>
+      <if test="jobId != null" >
+        JOB_ID_,
+      </if>
+      <if test="timeConsuming != null" >
+        TIME_CONSUMING,
+      </if>
+      <if test="jobSuccess != null" >
+        JOB_SUCCESS,
+      </if>
+      <if test="jobExceptipn != null" >
+        JOB_EXCEPTIPN,
+      </if>
+      <if test="startTime != null" >
+        START_TIME,
+      </if>
+      <if test="endTime != null" >
+        END_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="jobId != null" >
+        #{jobId,jdbcType=BIGINT},
+      </if>
+      <if test="timeConsuming != null" >
+        #{timeConsuming,jdbcType=VARCHAR},
+      </if>
+      <if test="jobSuccess != null" >
+        #{jobSuccess,jdbcType=BIGINT},
+      </if>
+      <if test="jobExceptipn != null" >
+        #{jobExceptipn,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="org.arain.power.common.pojo.system.SysJobLogExample" resultType="java.lang.Integer" >
+    select count(*) from sys_job_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update sys_job_log
+    <set >
+      <if test="record.id != null" >
+        ID_ = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.jobId != null" >
+        JOB_ID_ = #{record.jobId,jdbcType=BIGINT},
+      </if>
+      <if test="record.timeConsuming != null" >
+        TIME_CONSUMING = #{record.timeConsuming,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jobSuccess != null" >
+        JOB_SUCCESS = #{record.jobSuccess,jdbcType=BIGINT},
+      </if>
+      <if test="record.jobExceptipn != null" >
+        JOB_EXCEPTIPN = #{record.jobExceptipn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startTime != null" >
+        START_TIME = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null" >
+        END_TIME = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update sys_job_log
+    set ID_ = #{record.id,jdbcType=BIGINT},
+      JOB_ID_ = #{record.jobId,jdbcType=BIGINT},
+      TIME_CONSUMING = #{record.timeConsuming,jdbcType=VARCHAR},
+      JOB_SUCCESS = #{record.jobSuccess,jdbcType=BIGINT},
+      JOB_EXCEPTIPN = #{record.jobExceptipn,jdbcType=VARCHAR},
+      START_TIME = #{record.startTime,jdbcType=TIMESTAMP},
+      END_TIME = #{record.endTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="org.arain.power.common.pojo.system.SysJobLog" >
+    update sys_job_log
+    <set >
+      <if test="jobId != null" >
+        JOB_ID_ = #{jobId,jdbcType=BIGINT},
+      </if>
+      <if test="timeConsuming != null" >
+        TIME_CONSUMING = #{timeConsuming,jdbcType=VARCHAR},
+      </if>
+      <if test="jobSuccess != null" >
+        JOB_SUCCESS = #{jobSuccess,jdbcType=BIGINT},
+      </if>
+      <if test="jobExceptipn != null" >
+        JOB_EXCEPTIPN = #{jobExceptipn,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        START_TIME = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        END_TIME = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID_ = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.arain.power.common.pojo.system.SysJobLog" >
+    update sys_job_log
+    set JOB_ID_ = #{jobId,jdbcType=BIGINT},
+      TIME_CONSUMING = #{timeConsuming,jdbcType=VARCHAR},
+      JOB_SUCCESS = #{jobSuccess,jdbcType=BIGINT},
+      JOB_EXCEPTIPN = #{jobExceptipn,jdbcType=VARCHAR},
+      START_TIME = #{startTime,jdbcType=TIMESTAMP},
+      END_TIME = #{endTime,jdbcType=TIMESTAMP}
+    where ID_ = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

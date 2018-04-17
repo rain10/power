@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="edge" />
+<!-- <link rel="shortcut icon" href="https://w3.insdep.com/static/favicon.ico" /> -->
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+
+<link rel='stylesheet' href='/power/css/nprogress.css'/>
+<link href="/power/css/insdep.easyui.min.css" rel="stylesheet" type="text/css">
+<link href="/power/css/master.css" rel="stylesheet" type="text/css">
+<link href="/power/css/master_1.css" rel="stylesheet" type="text/css">
+<link href="/power/css/iconfont/iconfont.css" rel="stylesheet" type="text/css">
+<link href="/power/css/insdep.theme_default.css" rel="stylesheet" type="text/css">
+
+
+<script type="text/javascript" src="/power/js/jquery.min.js"></script>
+<script type="text/javascript" src="/power/layui/layui.js"></script>
+<script type="text/javascript" src="/power/layui/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="/power/js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/power/js/insdep.easyui.min.js"></script>
+<script type="text/javascript" src="/power/js/insdep.config.min.js"></script>
+<script type="text/javascript" src="/power/js/master.js"></script>
+<script type="text/javascript" src='/power/js/nprogress.js'></script>
+<script type="text/javascript" src='/power/js/jquery.blockUI.js'></script>
+<script type="text/javascript" src='/power/js/dialog.js'></script>
+<script type="text/javascript" src="/power/js/common.js"></script>
+
+
+</head>
+
+<body>
+<script>NProgress.start();</script>
+<!--显示遮罩层-->
+<div class="initial-mask" style="position:absolute;top:0;left:0;right:0;bottom:0;background:#fff;z-index:9999999;"></div>
+
+<!--主题整体布局-->
+<div class="theme-layout">
+		@include("/common/_menu.html"){}
+		
+		@include("/common/_main.html"){}
+</div>
+<!--主题整体布局 end-->
+
+<script>
+/* 页面加载完成后 */
+// JavaScript #1
+$(document).ready(function(){ 
+    /*结束顶部加载进度条*/
+    NProgress.done();
+    /*移除遮罩层*/
+　　$(".initial-mask").remove();
+
+
+}); 
+// JavaScript #1
+/* 页面加载完成后 end*/
+</script>
+
+</body>
+</html>

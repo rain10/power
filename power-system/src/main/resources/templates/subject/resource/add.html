@@ -1,0 +1,184 @@
+<body>
+	<div>
+		<form id="sysresources_form" class="easyui-form" method="post" data-options="novalidate:true">
+			<div class="easyui-tabs theme-tab-blue-line" style="width: 100%;">
+				<div title="基础配置" style="padding: 10px" data-options="iconCls:'fa fa-users'">
+					<#textbox id="" title="菜单名称" check="true" name="name" value="${sysResource.name!'' }" iw="82%" />
+					<#textbox id="url" title="菜单地址" check="true" name="url" value="${sysResource.url!'' }" iw="82%" />
+					<div>
+						<label for="" class="label-top" style='width:10%;display:inline-block;overflow:hidden;text-align:right'>菜单图标：</label>
+						<div style="width: 82%; float: right; height: 60px; overflow: scroll; border: 1px #ccc solid; margin-right: 7.5%;" id="iconDiv">
+							@if(has(icons)){
+			 				@for(icon in icons){
+			 					<a id="${icon}" style="float: left; padding: 5px 5px" onclick="icon('${icon}')"><i class="iconfont">${icon}</i></a>
+			 				@}
+							@}
+						</div>
+					</div>
+					<br>
+					<div style="margin-top: 8%;">
+						<label for="" class="label-top" style='width:10%;display:inline-block;overflow:hidden;text-align:right'>所属资源：</label> <input id="sysResources_pid"
+							class="easyui-combotree" style="width: 82%;height: 30px;"
+							data-options="editable:false,panelHeight:null" name="pid" value="${sysResource.enabled!'0' }">
+					</div>
+					<br>
+					<#textbox id="" title="权限标识" check="true" name="authorization" value="${sysResource.authorization!'' }" iw="82%" />
+					<#numberbox id="" title="菜单排序" check="false" name="sort" value="${sysResource.sort!'' }"  iw="82%" />
+					<#combox id="" title="是否可用"  name="enabled" iw="82%" value="${sysResource.enabled!'1' }" url="/common/loadEnabled.do"/>
+				</div>
+				
+				<div title="资源配置" style="padding: 10px">
+						<table id="resources_grid" class="easyui-datagrid" title=""style="width: 100%; height: auto" data-options="iconCls: 'icon-edit',singleSelect: true,toolbar: '#tb',url:'',method: 'post',onClickRow:onClickRow">
+							<thead>
+								<tr>
+									<th id="rname"
+										data-options="field:'name',width:100,editor:{type:'textbox',options:{required:true}}">名称</th>
+									<th id="rtarget"
+										data-options="field:'url',width:100,editor:{type:'textbox',options:{required:true}}">地址</th>
+									<th id="rtitle"
+										data-options="field:'authorization',width:100,editor:{type:'textbox',options:{required:true}}">标识符</th>
+									<th id="type"
+										data-options="field:'type',width:100,formatter:function(value,row){return row.typename;},editor:{type:'combobox',options:{valueField:'value',textField:'text',method:'get',data:[{value:'res_button',text:'权限按钮'},{value:'res_ajax',text:'ajax请求'}],required:true}}">请求类型</th>
+									<th id="renabled"
+										data-options="field:'enabled',width:100,formatter:function(value,row){return row.enabledname;},editor:{type:'combobox',options:{valueField:'value',textField:'text',method:'get',url:'/common/loadEnabled.do',required:true}}">是否可用</th>
+									<th id="authorization"
+										data-options="field:'havemune',width:100,formatter:function(value,row){return row.pwoername;},editor:{type:'combobox',options:{valueField:'value',textField:'text',method:'get',url:'/common/loadEnabled.do',required:true}}">是否授权</th>
+											</tr>
+										</thead>
+							</table>
+							<div id="tb" style="height: auto">
+									<a href="javascript:void(0)" class="easyui-linkbutton info" onclick="append()" id="btn">新增</a> 
+									<a href="javascript:void(0)" class="easyui-linkbutton warning" data-options="plain:true" onclick="removeit()">删除</a>
+							</div>
+				</div>
+			</div>
+			<br>
+			<#button id="" onclick="submitForm()" name="保存"  type="save"/>
+			<#button id="" onclick="closedialog(this)" name="关闭"  type="close"/>
+			
+			
+			<input type="hidden" id="sysResources_json" name="resourcesJson">
+			<input type="hidden" id="iconValue" name="icon" value="${sysResource.icon!'' }">
+			<input type="hidden" id="" name="id" value="${sysResource.id!'' }">
+		</form>
+	</div>
+	
+	<script type="text/javascript">
+	$(function() {
+		var id = $("#iconValue").val();
+		$('#'+id).css({ background:"#378DEE"});
+	})
+	
+	function icon(id) {
+		$("#iconDiv a").css({ background:"#FFFFFF"});
+		$('#'+id).css({ background:"#378DEE"});
+		$("#iconValue").val(id);
+	}
+	
+	var parentId = '${sysResource.pid!""}';
+	console.log(parentId)
+	$('#sysResources_pid').combotree({    
+	    url: '/sys/resource/load_tree.do',    
+	    required: false ,
+	    onLoadSuccess: function (node, data) {
+	    	if(parentId != null && parentId !='' && parentId != 0) {
+	    	var t = $("#sysResources_pid").combotree('tree');//获取tree  
+	            node= t.tree("find",parentId);  
+	            t.tree('select', node.target);
+	    	}
+		},
+		onChange:function(newValue,oldValue) {
+			if(newValue==0) {
+	 			$("#url").textbox({ 
+					required:false
+			});
+			}else {
+				$("#url").textbox({ 
+					required:true
+			});
+			}
+		}
+	});
+	
+	function submitForm(){
+		if (endEditing()){
+	 		$('#resources_grid').datagrid('acceptChanges');
+		}
+	 	var row = $('#resources_grid').datagrid('getRows');
+		$("#sysResources_json").val(JSON.stringify(row));
+		$('#sysresources_form').form('submit',{
+			url:'/sys/resource/save.do',
+			onSubmit:function(){
+				return $(this).form('enableValidation').form('validate');
+			},
+			 success: function (data) {
+				 if (JSON.parse(data).status ==200) {
+					 	break_save();
+					} else {
+							$.messager.alert('消息',JSON.parse(data).msg);
+					}
+			 }
+		});
+	}
+	
+	
+	var editIndex = undefined;
+	function endEditing() {
+		if (editIndex == undefined) {
+				return true
+			}
+		if ($('#resources_grid').datagrid('validateRow', editIndex)) {
+			var ed = $('#resources_grid').datagrid('getEditor', {index : editIndex,field : 'enabled'});
+			var productname = $(ed.target).combobox('getText');
+			$('#resources_grid').datagrid('getRows')[editIndex]['enabledname'] = productname;
+			var ed1 = $('#resources_grid').datagrid('getEditor', {index : editIndex,field : 'havemune'});
+			var pwoername = $(ed1.target).combobox('getText');
+			$('#resources_grid').datagrid('getRows')[editIndex]['pwoername'] = pwoername;
+			var ed2 = $('#resources_grid').datagrid('getEditor', {index : editIndex,field : 'type'});
+			var type = $(ed2.target).combobox('getText');
+			$('#resources_grid').datagrid('getRows')[editIndex]['typename'] = type;
+			$('#resources_grid').datagrid('endEdit',editIndex);editIndex = undefined;
+			return true;
+		} else {
+			return false;
+		}
+	}
+	function onClickRow(index) {
+			if (editIndex != index) {
+					if (endEditing()) {
+							$('#resources_grid').datagrid('selectRow',index).datagrid('beginEdit',index);
+							editIndex = index;
+					} else {
+							$('#resources_grid').datagrid('selectRow',editIndex);
+							}
+					}
+				}
+	function append() {
+			if (endEditing()) {
+					$('#resources_grid').datagrid('appendRow', {enabled : 1,havemune : 1});
+					editIndex = $('#resources_grid').datagrid('getRows').length - 1;
+					$('#resources_grid').datagrid('selectRow', editIndex).datagrid('beginEdit',editIndex);
+				}
+			}
+	function removeit() {
+			if (editIndex == undefined) {
+				return
+				}
+				$('#resources_grid').datagrid('cancelEdit',editIndex).datagrid('deleteRow', editIndex);
+				editIndex = undefined;
+				}
+	function accept() {
+				if (endEditing()) {
+					$('#resources_grid').datagrid('acceptChanges');
+					}
+			}
+	function reject() {
+			$('#resources_grid').datagrid('rejectChanges');
+			editIndex = undefined;
+			}
+	function getChanges() {
+			var rows = $('#resources_grid').datagrid('getChanges');
+				alert(rows.length+ ' rows are changed!');
+		}
+	</script>
+</body>
